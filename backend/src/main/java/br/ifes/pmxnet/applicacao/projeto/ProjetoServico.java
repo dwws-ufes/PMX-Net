@@ -44,7 +44,7 @@ public class ProjetoServico extends GenericServico<Projeto, Long> implements IPr
 
         @Override
     public void remover(Long id) {
-        Long currentUserId = 1L;     
+        Long currentUserId = JwtUtil.getUsuarioIdDoToken(); 
         if(id != null){
             Projeto info =  repository.getReferenceById(id);
             if(info.getUsuario().getId() == currentUserId){

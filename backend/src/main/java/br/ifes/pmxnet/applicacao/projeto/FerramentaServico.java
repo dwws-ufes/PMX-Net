@@ -24,7 +24,7 @@ public class FerramentaServico extends GenericServico<Ferramenta, Long> implemen
 
     @Override
     public List<Ferramenta> listar() {
-        Long currentID = 1L; // todo: PEGAR O USUARIO.
+        Long currentID = JwtUtil.getUsuarioIdDoToken();
         return ((IFerramentaRepository) repository).findAllByOwnerId(currentID);
     }
 
@@ -53,7 +53,7 @@ public class FerramentaServico extends GenericServico<Ferramenta, Long> implemen
 
     @Override
     public void remover(Long id) {
-        Long currentUserId =  JwtUtil.getUsuarioIdDoToken();
+        Long currentUserId = JwtUtil.getUsuarioIdDoToken();
         if (id != null) {
             Ferramenta info = repository.getReferenceById(id);
             if (info.getUsuario().getId() == currentUserId) {
