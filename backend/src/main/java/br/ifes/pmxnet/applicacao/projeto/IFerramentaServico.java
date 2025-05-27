@@ -2,8 +2,9 @@ package br.ifes.pmxnet.applicacao.projeto;
 
 
 import br.ifes.pmxnet.applicacao.IGenericServico;
+import br.ifes.pmxnet.applicacao.projeto.dto.FerramentaDTO;
 import br.ifes.pmxnet.dominio.Ferramenta;
 
-public interface IFerramentaServico extends IGenericServico<Ferramenta, Long> {
+public interface IFerramentaServico extends IGenericServico<Ferramenta, Long, FerramentaDTO> {
 
 }

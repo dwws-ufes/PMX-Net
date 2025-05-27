@@ -12,10 +12,16 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 public class JwtUtil {
 
-    private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private static final String SECRET = "uma-chave-bem-segura-e-com-mais-de-32-bytes";
+    private static final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
     private static final long EXPIRATION_TIME = 86400000; // 1 dia
 
     public static String generateToken(String email, Long id) {
+
+        System.out.println("**********************************");
+        System.out.println(email);
+        System.out.println(id);
+
         return Jwts.builder()
                 .setSubject(email)
                 .claim("id", id)
@@ -38,11 +44,14 @@ public class JwtUtil {
     }
 
     public static Long getUserIdFromToken(String token) {
+
+        System.out.println("**********************************");
+        System.out.println(getClaims(token).get("id", Long.class));
+
         return getClaims(token).get("id", Long.class);
     }
 
-
-     public static String getTokenAtual() {
+    public static String getTokenAtual() {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (attributes != null) {
             HttpServletRequest request = attributes.getRequest();
@@ -62,5 +71,4 @@ public class JwtUtil {
         return null;
     }
 
- 
 }

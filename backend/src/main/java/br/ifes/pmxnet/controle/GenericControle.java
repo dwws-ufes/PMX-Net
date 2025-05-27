@@ -7,29 +7,28 @@ import br.ifes.pmxnet.applicacao.IGenericServico;
 
 import java.util.List;
 
-public abstract class GenericControle<T, ID> implements IGenericControle<T, ID> {
+public abstract class GenericControle<T, ID, DTO> implements IGenericControle<T, ID, DTO> {
 
-    protected  IGenericServico<T, ID> service;
+    protected IGenericServico<T, ID, DTO> service;
 
-
-     public GenericControle(IGenericServico<T, ID> service) {
-        this.service =  service;
+    public GenericControle(IGenericServico<T, ID, DTO> service) {
+        this.service = service;
     }
 
     @GetMapping
-    public List<T> listar() {
+    public List<DTO> listar() {
         return service.listar();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<T> findById(@PathVariable ID id) {
+    public ResponseEntity<DTO> findById(@PathVariable ID id) {
         return service.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public T salvar(@RequestBody T entity) {
+    public DTO salvar(@RequestBody DTO entity) {
         return service.salvar(entity);
     }
 

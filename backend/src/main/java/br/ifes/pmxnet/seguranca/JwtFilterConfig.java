@@ -15,9 +15,6 @@ public class JwtFilterConfig {
 
         // ⚠️ Altere para o prefixo que você deseja proteger (ex: /api/privado/*)
         registrationBean.addUrlPatterns("/api/tipos/*");
-        registrationBean.addUrlPatterns("/api/projetos/*");
-        registrationBean.addUrlPatterns("/api/ferramentas/*");
-        registrationBean.addUrlPatterns("/api/informacaos/*");
 
         return registrationBean;
     }

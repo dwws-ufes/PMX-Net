@@ -2,38 +2,35 @@ package br.ifes.pmxnet.applicacao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-
 import java.util.List;
 import java.util.Optional;
 
-public abstract class GenericServico<T, ID> implements IGenericServico<T, ID> {
+public abstract class GenericServico<T, ID, DTO> implements IGenericServico<T, ID, DTO> {
 
     protected final JpaRepository<T, ID> repository;
+    protected final ConversorDTO<T, DTO> mapper;
 
-    public GenericServico(JpaRepository<T, ID> repository) {
+    public GenericServico(JpaRepository<T, ID> repository, ConversorDTO<T, DTO> mapper) {
         this.repository = repository;
+        this.mapper = mapper;
     }
 
-    @Override
-    public List<T> listar() {
-        return repository.findAll();
+    public Optional<DTO> findById(ID id) {
+        return repository.findById(id).map(mapper::toDTO);
     }
 
-    @Override
-    public Optional<T> findById(ID id) {
-        return repository.findById(id);
-    }
-
-    @Override
-    public T salvar(T entity) {
-        return repository.save(entity);
-    }
-
-    @Override
     public void remover(ID id) {
         repository.deleteById(id);
     }
 
+    // Métodos com DTO
+    public List<DTO> listar() {
+        return mapper.toDTOList(repository.findAll());
+    }
 
-
+    public DTO salvar(DTO dto) {
+        T entity = mapper.toEntity(dto);
+        T salvo = repository.save(entity);
+        return mapper.toDTO(salvo);
+    }
 }

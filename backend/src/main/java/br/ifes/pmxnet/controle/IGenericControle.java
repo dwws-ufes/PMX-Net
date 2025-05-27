@@ -5,16 +5,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-public interface IGenericControle<T, ID> {
+public interface IGenericControle<T, ID, DTO> {
 
     @GetMapping
-    List<T> listar();
+    List<DTO> listar();
 
     @GetMapping("/{id}")
-    ResponseEntity<T> findById(@PathVariable ID id);
+    ResponseEntity<DTO> findById(@PathVariable ID id);
 
     @PostMapping
-    T salvar(@RequestBody T entity);
+    DTO salvar(@RequestBody DTO entity);
 
     @DeleteMapping("/{id}")
     void remover(@PathVariable ID id);

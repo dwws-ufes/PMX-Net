@@ -1,54 +1,77 @@
 package br.ifes.pmxnet.applicacao.projeto;
 
 import br.ifes.pmxnet.applicacao.GenericServico;
+import br.ifes.pmxnet.applicacao.projeto.dto.FerramentaDTO;
+import br.ifes.pmxnet.applicacao.projeto.dto.FerramentaMapper;
 import br.ifes.pmxnet.dominio.Ferramenta;
 import br.ifes.pmxnet.dominio.Projeto;
 import br.ifes.pmxnet.persistencia.projeto.IFerramentaRepository;
 import br.ifes.pmxnet.persistencia.projeto.IProjetoRepository;
 import br.ifes.pmxnet.seguranca.JwtUtil;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PermissionDeniedDataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FerramentaServico extends GenericServico<Ferramenta, Long> implements IFerramentaServico {
+public class FerramentaServico extends GenericServico<Ferramenta, Long, FerramentaDTO> implements IFerramentaServico {
 
     @Autowired
-    IProjetoRepository projetoRepository;
+    protected IProjetoRepository projetoRepository;
 
-    public FerramentaServico(IFerramentaRepository repository) {
-        super(repository);
+    public FerramentaServico(IFerramentaRepository repository, FerramentaMapper ferramentaMapper) {
+        super(repository, ferramentaMapper);
     }
 
     @Override
-    public List<Ferramenta> listar() {
+    public List<FerramentaDTO> listar() {
         Long currentID = JwtUtil.getUsuarioIdDoToken();
-        return ((IFerramentaRepository) repository).findAllByOwnerId(currentID);
+        return mapper.toDTOList(((IFerramentaRepository) repository).findAllByOwnerId(currentID));
     }
 
     @Override
-    public Ferramenta salvar(Ferramenta entity) {
+    public FerramentaDTO salvar(FerramentaDTO entity) {
         Long currentUserId = JwtUtil.getUsuarioIdDoToken();
-        if (entity != null) {
-            Ferramenta info = repository.getReferenceById(entity.getId());
-            if (info.getUsuario().getId() == currentUserId) {
-                return repository.save(entity);
+
+        // Evita chamada com ID nulo para update
+        if (entity.getId() != null) {
+            try {
+                Ferramenta existente = repository.getReferenceById(entity.getId());
+
+                if (existente.isOwner(currentUserId)) {
+                    Ferramenta ferramenta = mapper.toEntity(entity);
+                    ferramenta.setProjeto(existente.getProjeto()); // mantém associação original
+                    Ferramenta salvo = repository.save(ferramenta);
+                    return mapper.toDTO(salvo);
+                } else {
+                    throw new PermissionDeniedDataAccessException("Sem permissão para alterar essa ferramenta", null);
+                }
+
+            } catch (EntityNotFoundException ex) {
+                // se entity.getId() não existe no banco
+                throw new IllegalArgumentException("Ferramenta com ID informado não encontrada", ex);
             }
         }
 
-        Projeto projeto = projetoRepository.getReferenceById(entity.getProjeto().getId());
-        if (projeto != null) {
-            if (projeto.getUsuario().getId() != currentUserId) {
-                entity.setProjeto(projeto);
-
-            } else {
-                return null;// disparar exception.
-            }
+        // Criação de nova ferramenta
+        if (entity.getProjetoId() == null) {
+            throw new IllegalArgumentException("projetoId não pode ser nulo");
         }
-        return repository.save(entity);
 
+        Projeto projeto = projetoRepository.getReferenceById(entity.getProjetoId());
+
+        if (!projeto.isOwner(currentUserId)) {
+            throw new PermissionDeniedDataAccessException("Sem permissão para adicionar ferramenta neste projeto",
+                    null);
+        }
+
+        Ferramenta nova = mapper.toEntity(entity);
+        nova.setProjeto(projeto);
+        Ferramenta salvo = repository.save(nova);
+        return mapper.toDTO(salvo);
     }
 
     @Override
@@ -56,7 +79,7 @@ public class FerramentaServico extends GenericServico<Ferramenta, Long> implemen
         Long currentUserId = JwtUtil.getUsuarioIdDoToken();
         if (id != null) {
             Ferramenta info = repository.getReferenceById(id);
-            if (info.getUsuario().getId() == currentUserId) {
+            if (info.isOwner(currentUserId)) {
                 ((FerramentaServico) repository).remover(id);
             } else {
                 System.out.println("ID:" + id);
