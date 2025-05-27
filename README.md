@@ -43,7 +43,7 @@ O projeto é dividido em duas pastas repositórios principais:
 
 ## Para rodar o projeto
 
-Primeiro rode o backend e depois do frontend. 
+Primeiro rode o backend e depois do frontend. Os dados existentes no banco do projeto são ficticios. 
 
 
 ### Backend
