@@ -43,13 +43,25 @@ O projeto é dividido em duas pastas repositórios principais:
 
 ## Para rodar o projeto
 
-## Backend
+Primeiro rode o backend e depois do frontend. 
 
-´´´
+
+### Backend
+
+```
+> cd backend
 > mvn clean install
 > mvn spring-boot:run
-´´´´
+```
 
+
+### Frontend
+
+```
+> cd frontend
+> npm install
+> npm run dev
+```
 
 ---
 
