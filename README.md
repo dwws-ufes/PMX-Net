@@ -4,22 +4,22 @@ O projeto **PMX-Net(Project Manager Experience Network)** consiste no desenvolvi
 
 ---
 
-## 🧩 Estrutura do Projeto
+## Estrutura do Projeto
 
 O projeto é dividido em duas pastas repositórios principais:
 
-### 📦 `backend/`
+### `backend/`
 - API REST construída com Spring Boot
 - Persistência com SQLite
 
-### 💻 `front-end/`
+### `front-end/`
 - Desenvolvido em Vue.js com Vuetify
 - Visualização interativa com Cytoscape.js e Chart.js
 - Formulários de cadastro e consulta
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 | Camada       | Tecnologias                                 |
 |--------------|---------------------------------------------|
@@ -28,7 +28,7 @@ O projeto é dividido em duas pastas repositórios principais:
 
 ---
 
-## 📂 Arquivos do Repositório
+## Arquivos do Repositório
 
 | Arquivo/Folder            | Descrição                                     |
 |---------------------------|-----------------------------------------------|
@@ -39,5 +39,19 @@ O projeto é dividido em duas pastas repositórios principais:
 | `pmx-net-diagrams.vpp`    | Diagrama UML do sistema (Visual Paradigm)     |
 
 ---
+
+
+## Para rodar o projeto
+
+## Backend
+
+´´´
+> mvn clean install
+> mvn spring-boot:run
+´´´´
+
+
+---
+
 
 
