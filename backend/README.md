@@ -29,7 +29,7 @@ O sistema utiliza SQLite. O arquivo `pmxnet.db` será criado automaticamente no 
 
 ## 📌 Observações
 
-- A aplicação é *stateful* e utiliza repository personalizados.
+- A aplicação é *stateless* e utiliza repository personalizados.
 - Toda estrutura segue o padrão arquitetural FrameWeb.
 
 
@@ -48,7 +48,7 @@ Faça login com:
 POST /api/auth/login
 Body:
 {
-  "email": "ana@ifes.edu.br",
+  "email": "usuario@ufes.edu.br",
   "senha": "123456"
 }
 ```
