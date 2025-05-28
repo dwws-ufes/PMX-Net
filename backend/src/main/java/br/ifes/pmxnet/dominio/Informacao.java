@@ -1,27 +1,21 @@
 package br.ifes.pmxnet.dominio;
 
-import java.util.Date;
-
 import jakarta.persistence.*;
 
 @Entity
 public class Informacao extends EntityBase {
 
     private String conteudo;
-    // private Date data;
     @ManyToOne
+    @JoinColumn(name = "projeto_id")
     private Projeto projeto;
-
-    // public Date getData() {
-    // return this.data;
-    // }
-
-    // public void setData(Date data) {
-    // this.data = data;
-    // }
 
     public Projeto getProjeto() {
         return projeto;
+    }
+
+    public void setProjeto(Projeto projeto) {
+        this.projeto = projeto;
     }
 
     public Usuario getUsuario() {

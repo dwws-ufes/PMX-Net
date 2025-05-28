@@ -12,6 +12,7 @@ public class Ferramenta extends EntityBase {
     private String tipo;
 
     @ManyToOne
+    @JoinColumn(name = "projeto_id")
     private Projeto projeto;
 
     public String getNome() {

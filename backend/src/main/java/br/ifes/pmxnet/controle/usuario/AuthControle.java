@@ -6,6 +6,7 @@ import br.ifes.pmxnet.seguranca.JwtUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +26,12 @@ public class AuthControle {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Usuario usuario) {
         Optional<Usuario> encontrado = usuarioRepository.findByEmail(usuario.getEmail());
+        System.out.print("************");
+        System.out.print(encontrado);
+        if (!encontrado.isPresent()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Usuário ou senha inválidos");
+        }
 
         if (!passwordEncoder().matches(usuario.getSenha(), encontrado.get().getSenha())) {
             ResponseEntity.status(401).body("Credenciais inválidas");

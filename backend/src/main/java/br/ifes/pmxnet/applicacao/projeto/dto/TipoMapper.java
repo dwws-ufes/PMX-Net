@@ -7,13 +7,13 @@ import br.ifes.pmxnet.applicacao.ConversorDTO;
 import br.ifes.pmxnet.dominio.Tipo;
 
 @Mapper(componentModel = "spring")
-public interface TipoMapper extends ConversorDTO<Tipo, TipoDTO> {
+public interface TipoMapper extends ConversorDTO<Tipo, br.ifes.pmxnet.applicacao.projeto.dto.TipoDTO> {
     @Override
-    TipoDTO toDTO(Tipo entity);
+    br.ifes.pmxnet.applicacao.projeto.dto.TipoDTO toDTO(Tipo entity);
 
     @Override
-    Tipo toEntity(TipoDTO dto);
+    Tipo toEntity(br.ifes.pmxnet.applicacao.projeto.dto.TipoDTO dto);
 
     @Override
-    List<TipoDTO> toDTOList(List<Tipo> entityList);
+    List<br.ifes.pmxnet.applicacao.projeto.dto.TipoDTO> toDTOList(List<Tipo> entityList);
 }
