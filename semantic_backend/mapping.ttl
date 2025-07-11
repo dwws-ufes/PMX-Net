@@ -2,6 +2,8 @@
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix ex: <http://example.org/relationship#> .
 
+
+
 <#ParticipanteMapping>
   a rr:TriplesMap ;
   rr:logicalTable [ rr:tableName "participante" ] ;
@@ -27,7 +29,14 @@
   rr:predicateObjectMap [
     rr:predicate foaf:knows ;
     rr:objectMap [ rr:template "http://example.org/participante/{conhecido}" ]
+	
+  ] ;
+  
+    rr:predicateObjectMap [
+    rr:predicate <http://schema.org/knows> ;
+    rr:objectMap [ rr:template "http://example.org/participante/{conhecido}" ]
   ] .
+  
 
 <#CollaboratesWithMapping>
   a rr:TriplesMap ;
@@ -49,6 +58,11 @@
 
   rr:predicateObjectMap [
     rr:predicate ex:collaboratesWith ;
+    rr:objectMap [ rr:template "http://example.org/participante/{p2_id}" ]
+  ] ;
+  
+  rr:predicateObjectMap [
+    rr:predicate schema:colleague  ;
     rr:objectMap [ rr:template "http://example.org/participante/{p2_id}" ]
   ] .
 
