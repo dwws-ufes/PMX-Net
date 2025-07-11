@@ -1,0 +1,104 @@
+classDiagram
+  %% CLASSES PRINCIPAIS
+  class Agent {
+  +mbox : Thing
+  +mbox_sha1sum : Literal
+  +gender : Literal
+  +birthday : Literal
+  +age : Literal
+  +status : Literal
+  +account : OnlineAccount
+  }
+
+  class Person {
+  +geekcode : Literal
+  +myersBriggs : Literal
+  +phone
+  +workplaceHomepage : Document
+  +workInfoHomepage : Document
+  +schoolHomepage : Document
+  +knows : Person
+  +interest : Document
+  +topic_interest : Thing
+  +publications : Document
+  +currentProject : Thing
+  +pastProject : Thing
+  +fundedBy : Thing
+  +plan : Literal
+  +firstName : Literal
+  +lastName : Literal
+  +givenName : Literal
+  +surname : Literal
+  +familyName : Literal
+  +jabberID : Literal
+  +aimChatID : Literal
+  +skypeID : Literal
+  +icqChatID : Literal
+  +yahooChatID : Literal
+  +msnChatID : Literal
+  }
+
+  class Group {
+    +member : Agent
+  }
+
+  class Organization
+  class Project
+  class Document {
+  +sha1 : Literal
+  +topic : Thing
+  +primaryTopic : Thing
+  }
+
+  class OnlineAccount {
+  +accountServiceHomepage : Document
+  +accountName : Literal
+  }
+
+  class OnlineGamingAccount
+  class OnlineEcommerceAccount
+  class OnlineChatAccount
+
+  class Image {
+  +thumbnail : Image
+  }
+
+  %% HERANÇAS
+  Person --|> Agent
+  Group --|> Agent
+  Organization --|> Agent
+  Project --|> Thing
+  Image --|> Document
+  PersonalProfileDocument --|> Document
+  OnlineGamingAccount --|> OnlineAccount
+  OnlineEcommerceAccount --|> OnlineAccount
+  OnlineChatAccount --|> OnlineAccount
+
+  %% RELACIONAMENTOS ENTRE CLASSES
+  Agent --> OnlineAccount : account
+  Person --> Document : publications
+  Person --> Document : workplaceHomepage
+  Person --> Document : workInfoHomepage
+  Person --> Document : schoolHomepage
+  Person --> Project : currentProject
+  Person --> Project : pastProject
+  Document --> Thing : topic
+  Document --> Thing : primaryTopic
+  Agent --> Document : interest
+  Agent --> Document : tipjar
+  Agent --> Image : img
+  Image --> Thing : depicts
+  Thing --> Image : depiction
+
+  %% INVERSE RELATIONSHIPS
+  Thing --> Document : isPrimaryTopicOf
+
+  %% EXTRAS
+  class Thing {
+  +name : Literal
+  +homepage : Document
+  +weblog : Document
+  +openID : Document
+  +logo : Thing
+  }
+

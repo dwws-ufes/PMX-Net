@@ -1,0 +1,22 @@
+
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix ex:   <http://example.org/relationship#> .
+
+# Base: FOAF knows
+foaf:knows a rdf:Property ;
+  rdfs:label "Conhece genericamente"@pt ;
+  rdfs:comment "Relação genérica de conhecimento entre agentes."@pt .
+
+# Colabora regularmente
+ex:collaboratesWith a rdf:Property ;
+  rdfs:label "Colabora regularmente"@pt ;
+  rdfs:comment "Indica colaboração regular (≥ 3 tarefas ou PRs em comum nos últimos 3 meses)."@pt ;
+  rdfs:subPropertyOf foaf:knows .
+
+# Colaboração intensa
+ex:strongCollaboratorOf a rdf:Property ;
+  rdfs:label "Colaboração intensa"@pt ;
+  rdfs:comment "Indica colaboração intensa (≥ 10 tarefas/PRs em coautoria + revisões cruzadas)."@pt ;
+  rdfs:subPropertyOf foaf:knows .
