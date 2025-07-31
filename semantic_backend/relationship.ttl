@@ -6,12 +6,8 @@
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix schema: <http://schema.org/> .
 
-# Base: FOAF knows
-foaf:knows a rdf:Property ;
-  rdfs:label "Conhece genericamente"@pt ;
-  rdfs:comment "Relação genérica de conhecimento entre agentes."@pt .
 
-foaf:knows owl:equivalentProperty schema:knows .
+foaf:knows owl:equivalentProperty schema:knows . # remover para testar se continua funcionando.
 
 # Colabora regularmente
 ex:collaboratesWith a rdf:Property ;

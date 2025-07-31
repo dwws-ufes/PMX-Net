@@ -25,3 +25,8 @@ Baixar o RDF completo.
 http://localhost:8080/sparql?query=CONSTRUCT%20%7B%20%3Fs%20%3Fp%20%3Fo%20.%20%7D%20WHERE%20%7B%20%3Fs%20%3Fp%20%3Fo%20.%20%7D
 
 
+http://localhost:8080/sparql?query=CONSTRUCT { ?s ?p ?o . } WHERE { ?s ?p ?o . }
+
+# Consulta a bases externas. 
+# em cima de schema ou instanicas, tem que ser w3c. 
+

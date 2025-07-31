@@ -3,7 +3,15 @@
     <v-card>
       <v-card-title>
         <span class="text-h6">
-          {{ projeto.id ? 'Editar Projeto' : 'Novo Projeto' }}
+          {{ projeto.id ? 'Editar' : 'Novo' }}
+          <span
+            v-if="descricaoFoaf"
+            :title="descricaoFoaf"
+            style="text-decoration: underline dotted; cursor: help;"
+          >
+            Projeto
+          </span>
+          <span v-else>Projeto</span>
         </span>
       </v-card-title>
 
@@ -33,27 +41,51 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
+import { QueryEngine  } from '@comunica/query-sparql'
 
 const props = defineProps({
   modelValue: Boolean,
-  projeto: Object // Recebe o projeto para edição ou criação
+  projeto: Object
 })
 
 const emit = defineEmits(['update:modelValue', 'salvo'])
 
 const dialogModel = ref(props.modelValue)
 const projeto = ref({ id: null, nome: '', descricao: '' })
+const descricaoFoaf = ref('')
 
-// Sincroniza o estado do modal
+// 🔍 Consulta SPARQL usando @comunica/query-sparql
+async function buscarDescricaoFOAFProject() {
+  try {
+    const engine = new QueryEngine()
+    const query = `
+      PREFIX dbr: <http://dbpedia.org/resource/>
+      PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+      SELECT ?comment WHERE {
+        dbr:Project rdfs:comment ?comment .
+        FILTER (lang(?comment) = "pt")
+      }
+    `
+    const result = await engine.queryBindings(query, {
+      sources: ['https://dbpedia.org/sparql']
+    })
+    const bindings = await result.toArray()
+    descricaoFoaf.value = bindings[0]?.get('comment')?.value || ''
+  } catch (err) {
+    console.error('Erro ao consultar DBpedia:', err)
+  }
+}
+
+onMounted(buscarDescricaoFOAFProject)
+
+// Sincronização com modelValue
 watch(() => props.modelValue, val => {
   dialogModel.value = val
 })
 watch(dialogModel, val => {
   emit('update:modelValue', val)
 })
-
-// Atualiza o formulário ao receber novo projeto como prop
 watch(() => props.projeto, (novoProjeto) => {
   if (novoProjeto) {
     projeto.value = { ...novoProjeto }
