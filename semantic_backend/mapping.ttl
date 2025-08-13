@@ -16,7 +16,15 @@
   rr:predicateObjectMap [
     rr:predicate foaf:name ;
     rr:objectMap [ rr:column "nome" ]
+  ] ;
+  
+  
+  rr:predicateObjectMap [
+    rr:predicate foaf:mbox ;
+    rr:objectMap [ rr:column "email" ]
   ] .
+  
+  
 
 <#KnowsMapping>
   a rr:TriplesMap ;

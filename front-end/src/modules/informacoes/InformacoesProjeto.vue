@@ -55,12 +55,23 @@
         </li>
       </ul>
 
-      <v-alert type="warning" v-if="pontosCriticos.length" class="mt-6">
-        <strong>Pontos críticos de comunicação identificados:</strong>
-        <ul>
-          <li v-for="p in pontosCriticos" :key="p">{{ p }}</li>
-        </ul>
-      </v-alert>
+  <v-alert type="warning" v-if="pontosCriticos.length" class="mt-6">
+  <strong>Pontos críticos de comunicação identificados:</strong>
+  <ul>
+    <li v-for="p in pontosCriticos" :key="p">
+      {{ p }}
+      <a
+        :href="getRdfUrl(p)"
+        target="_blank"
+        download
+        style="margin-left: 8px; color: white; text-decoration: underline;"
+      >
+        [Informações Semanticas em RDF]
+      </a>
+    </li>
+  </ul>
+</v-alert>
+
 
       <h2 class="text-h6 font-weight-bold mt-8 mb-2">Pontes de Informação (Bridges)</h2>
       <ul>
@@ -95,6 +106,21 @@ const pontosCriticos = ref([])
 const pontes = ref([])
 const gruposEquipe = ref([])
 const distribuicaoCliques = ref({})
+
+function getRdfUrl(p) {
+  const query = `
+    PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+    SELECT ?participante ?email WHERE {
+      ?participante a foaf:Person ;
+                    foaf:name "${p}" ;
+                    foaf:mbox ?email .
+    }
+  `;
+      const encodedQuery = encodeURIComponent(query);
+      // Retorna URL para RDF/XML
+      return `http://localhost:8081/sparql?query=${encodedQuery}&format=application/rdf+xml`;
+    }
+
 
 function carregarProjetos() {
   projetoService.listar().then(({ data }) => {

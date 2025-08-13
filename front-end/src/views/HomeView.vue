@@ -25,9 +25,19 @@
       </v-container>
     </v-main>
 
-    <v-footer color="primary" app inset>
-      <v-col class="text-center white--text">Desenvolvido por Felipe Oliveira © 2025</v-col>
-    </v-footer>
+<v-footer color="primary" app inset>
+  <v-col class="text-center white--text">
+    Desenvolvido por Felipe Oliveira © 2025
+    <br>
+    <a 
+      href="http://localhost:8081/sparql?query=CONSTRUCT%20%7B%20%3Fs%20%3Fp%20%3Fo%20.%20%7D%20WHERE%20%7B%20%3Fs%20%3Fp%20%3Fo%20.%20%7D" 
+      target="_blank"
+      style="color: white; text-decoration: underline;"
+    >
+      Informações da Semantic Web
+    </a>
+  </v-col>
+</v-footer>
   </v-app>
 </template>
 

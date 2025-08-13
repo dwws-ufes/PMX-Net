@@ -5,8 +5,8 @@
         <span class="text-h6">
           {{ projeto.id ? 'Editar' : 'Novo' }}
           <span
-            v-if="descricaoFoaf"
-            :title="descricaoFoaf"
+            v-if="descricaoDB"
+            :title="descricaoDB"
             style="text-decoration: underline dotted; cursor: help;"
           >
             Projeto
@@ -53,10 +53,12 @@ const emit = defineEmits(['update:modelValue', 'salvo'])
 
 const dialogModel = ref(props.modelValue)
 const projeto = ref({ id: null, nome: '', descricao: '' })
-const descricaoFoaf = ref('')
+const descricaoDB = ref('')
 
-// 🔍 Consulta SPARQL usando @comunica/query-sparql
-async function buscarDescricaoFOAFProject() {
+//  Consulta SPARQL usando @comunica/query-sparql
+async function buscarDescricaoDBPediaFProject() {
+  const CACHE_KEY = 'buscarDescricaoDBPediaFProject'
+
   try {
     const engine = new QueryEngine()
     const query = `
@@ -67,17 +69,32 @@ async function buscarDescricaoFOAFProject() {
         FILTER (lang(?comment) = "pt")
       }
     `
+
     const result = await engine.queryBindings(query, {
       sources: ['https://dbpedia.org/sparql']
     })
     const bindings = await result.toArray()
-    descricaoFoaf.value = bindings[0]?.get('comment')?.value || ''
+    const descricao = bindings[0]?.get('comment')?.value || ''
+
+    //  Atualiza valor exibido
+    descricaoDB.value = descricao
+
+    //  Salva no localStorage
+    localStorage.setItem(CACHE_KEY, descricao)
   } catch (err) {
     console.error('Erro ao consultar DBpedia:', err)
+    //  Fallback: tenta pegar do cache
+    const cached = localStorage.getItem(CACHE_KEY)
+    if (cached) {
+      console.warn('Usando valor do cache local.')
+      descricaoDB.value = cached
+    } else {
+      descricaoDB.value = ''
+    }
   }
 }
 
-onMounted(buscarDescricaoFOAFProject)
+onMounted(buscarDescricaoDBPediaFProject)
 
 // Sincronização com modelValue
 watch(() => props.modelValue, val => {
